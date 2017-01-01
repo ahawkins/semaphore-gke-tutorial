@@ -1,0 +1,32 @@
+version: '2'
+
+services:
+  redis:
+    image: redis
+
+  server:
+    depends_on:
+      - redis
+    build: server/
+    # TODO: replace with your zone and project ID
+    image: eu.gcr.io/semaphore-gke-tutorial/server
+    environment:
+      REDIS_URL: redis://redis:6379
+
+  counter:
+    depends_on:
+      - server
+    build: counter/
+    # TODO: replace with your zone and project ID
+    image: eu.gcr.io/semaphore-gke-tutorial/counter
+    environment:
+      API_URL: http://server:8080
+
+  poller:
+    depends_on:
+      - server
+    build: poller/
+    # TODO: replace with your zone and project ID
+    image: eu.gcr.io/semaphore-gke-tutorial/poller
+    environment:
+      API_URL: http://server:8080

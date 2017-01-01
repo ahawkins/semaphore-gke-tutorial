@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+spec:
+  # Match pods with these labels
+  selector:
+    name: redis
+  ports:
+    - protocol: TCP
+      port: 6379

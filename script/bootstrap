@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# First delete evertying we may have created before
+kubectl delete deployments --all --namespace "${1}"
+kubectl delete services --all --namespace "${1}"
+kubectl delete pods --all --namespace "${1}"
+
+# Next deploy services. These must be created before the pods so pods
+# populate the service.
+kubectl create -f k8s/production-redis-service.yml --namespace "${1}"
+kubectl create -f k8s/production-server-service.yml --namespace "${1}"
+
+# Create pods and deployments
+kubectl create -f k8s/production-redis-pod.yml --namespace "${1}"
+kubectl create -f k8s/production-server-deployment.yml --namespace "${1}"
+kubectl create -f k8s/production-support-deployment.yml --namespace "${1}"

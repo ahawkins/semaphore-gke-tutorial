@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: server
+spec:
+  replicas: 5
+  template:
+    metadata:
+      labels:
+        name: server
+    spec:
+      containers:
+        - name: server
+          # TODO: set zone and project
+          image: 'eu.gcr.io/semaphore-gke-tutorial/server'
+          imagePullPolicy: Always
+          env:
+            - name: "REDIS_URL"
+              # NOTE: Kubernetes interpolates environment variables using ${}
+              value: "redis://$(REDIS_SERVICE_HOST):6379"

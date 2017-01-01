@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo
+  labels:
+    name: demo
+spec:
+  containers:
+    - name: redis
+      image: "redis:latest"
+      ports:
+        - containerPort: 6379
+          protocol: TCP
+
+    - name: server
+      # TODO: set this with your zone and project id
+      image: "eu.gcr.io/semaphore-gke-tutorial/server"
+      imagePullPolicy: Always
+      ports:
+        - containerPort: 8080
+          protocol: TCP
+      env:
+        - name: "REDIS_URL"
+          value: "redis://localhost:6379"
+
+    - name: counter
+      # TODO: set this with your zone and project id
+      image: 'eu.gcr.io/semaphore-gke-tutorial/counter'
+      imagePullPolicy: Always
+      env:
+        - name: "API_URL"
+          value: "http://localhost:8080"
+
+    - name: poller
+      # TODO: set this with your zone and project id
+      image: "eu.gcr.io/semaphore-gke-tutorial/poller"
+      imagePullPolicy: Always
+      env:
+        - name: "API_URL"
+          value: "http://localhost:8080"

@@ -1,0 +1,29 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: support
+spec:
+  replicas: 10
+  template:
+    metadata:
+      labels:
+        name: support
+    spec:
+      containers:
+        - name: counter
+          # TODO: set zone and project
+          image: 'eu.gcr.io/semaphore-gke-tutorial/counter'
+          imagePullPolicy: Always
+          env:
+            - name: "API_URL"
+              # NOTE: Kubernetes interpolates environment variables using ${}
+              value: "http://$(SERVER_SERVICE_HOST):80"
+
+        - name: poller
+          # TODO: set zone and project
+          image: 'eu.gcr.io/semaphore-gke-tutorial/poller'
+          imagePullPolicy: Always
+          env:
+            - name: "API_URL"
+              # NOTE: Kubernetes interpolates environment variables using ${}
+              value: "http://$(SERVER_SERVICE_HOST):80"
