@@ -22,6 +22,15 @@ kubectl version -c
 docker-compose --version
 
 # TODO: replace the project with your project ID
+echo "Authenticating gcloud service account"
 gcloud auth activate-service-account \
 	--key-file /home/runner/auth.json \
 	--project semaphore-gke-tutorial \
+
+echo "Authenticating to GCR"
+gcloud docker --authorize-only --project semaphore-gke-tutorial
+
+echo "Configuring kubectl"
+gcloud container clusters get-credentials demo \
+	--project semaphore-gke-tutorial \
+	--zone europe-west1-b
