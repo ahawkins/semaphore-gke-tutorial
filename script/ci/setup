@@ -3,6 +3,9 @@
 set -euo pipefail
 
 main() {
+	# TODO: replace the project with your project ID
+	local project=semaphore-gke-tutorial
+
 	# Pre-req for gcloud install
 	sudo apt-get update
 	sudo apt-get install -y apt-transport-https
@@ -21,9 +24,6 @@ main() {
 	gcloud --version
 	kubectl version -c
 	docker-compose --version
-
-	# TODO: replace the project with your project ID
-	local project=semaphore-gke-tutorial
 
 	echo "Authenticating gcloud service account"
 	gcloud auth activate-service-account \
