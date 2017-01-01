@@ -2,6 +2,42 @@
 
 set -euo pipefail
 
-gcloud --version
-kubectl version
-docker-compose --version
+main() {
+	local namespace=production
+
+	# if [ -z "${namespace}" ]; then
+	# 	echo "USAGE: ${0} NAMESPACE" 1>&2
+	# 	return 1
+	# fi
+
+	docker-compose build
+	docker-compose push
+
+	if ! kubectl describe namespace "${namespace}" &> /dev/null; then
+		kubectl create -f k8s/production-namespace.yml --namespace "${namespace}"
+	fi
+
+	if ! kubectl get pod redis "${namespace}" &> /dev/null; then
+		kubectl create -f k8s/production-redis-pod.yml --namespace "${namespace}"
+	fi
+
+	if ! kubectl get service redis "${namespace}" &> /dev/null; then
+		kubectl create -f k8s/production-redis-service.yml --namespace "${namespace}"
+	fi
+
+	if ! kubectl get service server "${namespace}" &> /dev/null; then
+		kubectl create -f k8s/production-server-service.yml --namespace "${namespace}"
+	fi
+
+	if ! kubectl get deployment server "${namespace}" &> /dev/null; then
+		kubectl create -f k8s/production-server-deployment.yml --namespace "${namespace}"
+	fi
+
+	if ! kubectl get deployment support "${namespace}" &> /dev/null; then
+		kubectl create -f k8s/production-support-deployment.yml --namespace "${namespace}"
+	fi
+
+	kubectl get pods --namespace "${namespace}"
+}
+
+main "$@"
