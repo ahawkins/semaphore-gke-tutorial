@@ -5,22 +5,6 @@ set -euo pipefail
 main() {
 	local namespace=production
 
-	# TODO: replace the project with your project ID
-	local project=semaphore-gke-tutorial
-
-	echo "Authenticating gcloud service account"
-	gcloud auth activate-service-account \
-		--key-file "${GOOGLE_APPLICATION_CREDENTIALS}" \
-		--project "${project}"
-
-	echo "Authenticating to GCR"
-	gcloud docker --authorize-only --project "${project}"
-
-	echo "Configuring kubectl"
-	gcloud container clusters get-credentials demo \
-		--project "${project}" \
-		--zone europe-west1-b
-
 	docker-compose build
 	docker-compose push
 
