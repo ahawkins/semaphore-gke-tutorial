@@ -22,3 +22,5 @@ main() {
 	kubectl version -c
 	docker-compose --version
 }
+
+main "$@"
