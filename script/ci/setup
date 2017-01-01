@@ -16,3 +16,8 @@ sudo apt-get install -y google-cloud-sdk kubectl
 gcloud --version
 kubectl version -c
 docker-compose --version
+
+# TODO: replace the project with your project ID
+gcloud auth activate-service-account \
+	--key-file /home/runner/auth.json \
+	--project semaphore-gke-tutorial \
