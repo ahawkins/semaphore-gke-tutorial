@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+gcloud --version
+kubectl version
+docker-compose --version
