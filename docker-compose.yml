@@ -30,3 +30,10 @@ services:
     image: eu.gcr.io/semaphore-gke-tutorial/poller
     environment:
       API_URL: http://server:8080
+
+  datastore:
+    depends_on:
+      - server
+    image: timescale/timescaledb:latest-pg11
+    environment:
+      - POSTGRES_PASSWORD=!@^4*!#&!#$FS#FSA
